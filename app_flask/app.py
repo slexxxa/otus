@@ -14,4 +14,4 @@ def show_user_profile(username):
 def health():
     return '{"status": "OK"}'
 
-app.run(debug=True, host='0.0.0.0')
+app.run(debug=True, host='0.0.0.0', port=8000)
