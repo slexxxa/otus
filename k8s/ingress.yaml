@@ -7,10 +7,10 @@ metadata:
 spec:
   ingressClassName: nginx-example
   rules:
-  - http:
+  - host: "arch.homework"
+    http:
       paths:
       - path: /flask
-        host: "arch.homework"
         pathType: Prefix
         backend:
           service:
