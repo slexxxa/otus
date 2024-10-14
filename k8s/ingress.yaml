@@ -10,6 +10,7 @@ spec:
   - http:
       paths:
       - path: /flask
+        host: "arch.homework"
         pathType: Prefix
         backend:
           service:
