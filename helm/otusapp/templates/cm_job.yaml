@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-migration-script
+data:
+  script.sql: |-
+    {{ .Values.db.migrationScript | nindent 4 }}
+

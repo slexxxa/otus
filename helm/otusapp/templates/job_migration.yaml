@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration-job
+  annotations:
+    "helm.sh/hook": post-upgrade,post-install
+#    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  backoffLimit: 10
+  template:
+    spec:
+      containers:
+      - name: migration
+        image:  {{ .Values.db.image }}
+        volumeMounts:
+        - name: migration-script
+          mountPath: /scripts
+        env:
+        - name: PGHOST
+          value: {{ .Release.Name }}-{{ .Values.db.host }}
+        - name: PGUSER
+          value: {{ .Values.db.user }}
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-{{ .Values.db.host }}
+              key: postgres-password
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            psql < /scripts/script.sql
+      restartPolicy: OnFailure
+      volumes:
+      - name: migration-script
+        configMap:
+          name: configmap-migration-script

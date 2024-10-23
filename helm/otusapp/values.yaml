@@ -102,3 +102,18 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+db:
+  image: "bitnami/postgresql:17.0.0-debian-12-r6"
+  host: postgresql
+  user: postgres
+  migrationScript: |
+     CREATE DATABASE otus; 
+     \c otus
+     CREATE TABLE users (
+       id bigserial primary key,
+       username varchar(20),
+       firstname varchar(20),
+       lastname varchar(20),
+       email varchar(20),
+       phone varchar(20) ); 
