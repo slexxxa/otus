@@ -2,7 +2,7 @@ from flask import Flask, request, json
 import psycopg2
 
 
-def psql(method, uid=0,  username=0, firstname=0, lastname=0, email=0, phone=0):
+def psql(method, uid=0, username=0, firstname=0, lastname=0, email=0, phone=0):
     global output
     conn = psycopg2.connect(
         dbname="otus",
@@ -17,17 +17,23 @@ def psql(method, uid=0,  username=0, firstname=0, lastname=0, email=0, phone=0):
     # conn.autocommit = True
     if method == "GET":
         cur.execute("""
-                SELECT username, firstname, lastname, email, phone FROM users WHERE id = %s;""", (uid, )
+                SELECT username, firstname, lastname, email, phone FROM users WHERE id = %s;""", (uid,)
                     )
         row = cur.fetchone()
         output = json.jsonify(
-                      id=uid,
-                      username=row[0],
-                      firstName=row[1],
-                      lastName=row[2],
-                      email=row[3],
-                      phone=row[4]
-                                )
+            id=uid,
+            username=row[0],
+            firstName=row[1],
+            lastName=row[2],
+            email=row[3],
+            phone=row[4]
+        )
+
+    if method == "DELETE":
+        cur.execute("""
+                DELETE FROM users WHERE id = %s;""", (uid,)
+                    )
+        output = ''
 
     if method == "POST":
         cur.execute("""
@@ -42,6 +48,7 @@ def psql(method, uid=0,  username=0, firstname=0, lastname=0, email=0, phone=0):
 
     return output
 
+
 app = Flask(__name__)
 
 
@@ -51,9 +58,14 @@ def hello_world():
 
 
 @app.route('/api/v1/user/<uid>', methods=['GET'])
-def show_user_profile(uid):
+def get_user(uid):
     # uid = int(uid)
     return psql("GET", uid)
+
+
+@app.route('/api/v1/user/<uid>', methods=['DELETE'])
+def delete_user(uid):
+    return psql("DELETE", uid), 204
 
 
 @app.route('/health')
@@ -62,7 +74,7 @@ def health():
 
 
 @app.route('/api/v1/user', methods=['POST'])
-def user():
+def post_user():
     request_data = request.get_json()
 
     username = request_data['username']
