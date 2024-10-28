@@ -37,6 +37,18 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          env:
+            - name: PGHOST
+              value: {{ .Release.Name }}-{{ .Values.db.host }}
+            - name: PGUSER
+              value: {{ .Values.db.user }}
+            - name: PGDBNAME
+              value: {{ .Values.db.dbname }}
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-{{ .Values.db.host }}
+                  key: postgres-password
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
