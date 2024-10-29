@@ -1,14 +1,21 @@
 from flask import Flask, request, json
 import psycopg2, os
+global dbname, user, password, host, port
+
+envdbname = os.environ["PGDBNAME"]
+envuser = os.environ["PGUSER"]
+envpassword = os.environ["PGPASSWORD"]
+envhost = os.environ["PGHOST"]
+envport = os.environ.get("PGPORT", "5432")
 
 def psql(method, uid=0, username=0, firstname=0, lastname=0, email=0, phone=0):
     global output
     conn = psycopg2.connect(
-        dbname=os.environ["PGDBNAME"],
-        user=os.environ["PGUSER"],
-        password=os.environ["PGPASSWORD"],
-        host=os.environ["PGHOST"],
-        port=os.environ.get("PGPORT", "5432")
+        dbname=envdbname,
+        user=envuser,
+        password=envpassword,
+        host=envhost,
+        port=envport
     )
 
     cur = conn.cursor()
