@@ -1,11 +1,13 @@
 from flask import Flask, request, json
+from prometheus_flask_exporter import PrometheusMetrics
 import psycopg2, os
 global dbname, user, password, host, port
 
-envdbname = os.environ["PGDBNAME"]
-envuser = os.environ["PGUSER"]
-envpassword = os.environ["PGPASSWORD"]
-envhost = os.environ["PGHOST"]
+
+envdbname = os.environ.get("PGDBNAME", "otus")
+envuser = os.environ.get("PGUSER", "postgres")
+envpassword = os.environ.get("PGPASSWORD", "12345678")
+envhost = os.environ.get("PGHOST", "10.169.44.141")
 envport = os.environ.get("PGPORT", "5432")
 
 def psql(method, uid=0, username=0, firstname=0, lastname=0, email=0, phone=0):
@@ -67,6 +69,7 @@ def psql(method, uid=0, username=0, firstname=0, lastname=0, email=0, phone=0):
 
 
 app = Flask(__name__)
+PrometheusMetrics(app)
 
 
 @app.route('/')
@@ -113,5 +116,5 @@ def post_user():
     return psql("POST", 0, username, firstname, lastname, email, phone)
 
 
-app.run(debug=True, host='0.0.0.0', port=8000)
+app.run(debug=False, host='0.0.0.0', port=8000)
 
