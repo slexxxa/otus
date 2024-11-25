@@ -136,6 +136,7 @@ db:
      CREATE TABLE users (
        id bigserial primary key,
        username varchar(20),
+       password varchar(20),
        firstname varchar(20),
        lastname varchar(20),
        email varchar(20),
