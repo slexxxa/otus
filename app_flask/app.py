@@ -90,7 +90,7 @@ def psql(method, uid=0, username=0, password=0, firstname=0, lastname=0, email=0
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = ''.join(random.choices(string.ascii_letters, k=20))
+app.config['SECRET_KEY'] = 'verySecretKeyQQQ' #''.join(random.choices(string.ascii_letters, k=20))
 
 PrometheusMetrics(app)
 
