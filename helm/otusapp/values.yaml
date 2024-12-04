@@ -131,8 +131,8 @@ db:
   user: postgres
   dbname: otus
   migrationScript: |
-     CREATE DATABASE otus; 
-     \c otus
+     CREATE DATABASE auth; 
+     \c auth
      CREATE TABLE users (
        id bigserial primary key,
        username varchar(20) UNIQUE,
@@ -142,3 +142,29 @@ db:
        email varchar(20),
        phone varchar(20) ); 
      INSERT INTO users (username, password) VALUES ('admin','admin');
+
+     CREATE DATABASE billing;
+     \c billing
+     CREATE TABLE billing (
+     id bigserial primary key,
+     username varchar(20) UNIQUE,
+     money integer );
+
+     CREATE DATABASE orders;
+     \c orders
+     CREATE TABLE orders (
+     id bigserial primary key,
+     order varchar(20) UNIQUE,
+     cost integer );
+     INSERT INTO order (order, cost) VALUES ('tabouret',500);
+     INSERT INTO order (order, cost) VALUES ('cow',2500);
+     INSERT INTO order (order, cost) VALUES ('pin',50);
+     INSERT INTO order (order, cost) VALUES ('cleaner',1000);
+     INSERT INTO order (order, cost) VALUES ('car',10000);
+
+     CREATE DATABASE notyfy;
+     \c notyfy
+     CREATE TABLE email (
+     id bigserial primary key,
+     email varchar(20) UNIQUE,
+     message text );
