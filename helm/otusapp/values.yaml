@@ -152,7 +152,7 @@ db:
 
      CREATE DATABASE orders;
      \c orders
-     CREATE TABLE orders (
+     CREATE TABLE order (
      id bigserial primary key,
      order varchar(20) UNIQUE,
      cost integer );
