@@ -150,6 +150,8 @@ db:
      username varchar(20) UNIQUE,
      money integer );
 
+     CREATE DATABASE windows;
+     \c windows
      CREATE TABLE windows (
      id bigserial primary key,
      th varchar(20) UNIQUE,
