@@ -166,5 +166,5 @@ db:
      \c notyfy
      CREATE TABLE email (
      id bigserial primary key,
-     email varchar(20) UNIQUE,
+     email varchar(20),
      message text );
