@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: auth
   labels:
-    app: auth
+    app: "auth"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: auth
+        app: "auth"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -32,7 +32,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.service.auth.port }}
               protocol: TCP
           env:
             - name: PGHOST
