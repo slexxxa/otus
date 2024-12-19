@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "otusapp.fullname" . }}
+  name: auth
   labels:
-    {{- include "otusapp.labels" . | nindent 4 }}
+    app: auth
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "otusapp.selectorLabels" . | nindent 6 }}
+      app: "auth"
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,10 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "otusapp.labels" . | nindent 8 }}
-        {{- with .Values.podLabels }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
+        app: auth
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -31,7 +28,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.auth.repository }}:{{ .Values.image.auth.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
