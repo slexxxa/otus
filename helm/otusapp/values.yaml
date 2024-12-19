@@ -200,7 +200,8 @@ db:
      CREATE TABLE billing (
      id bigserial primary key,
      username varchar(20) UNIQUE,
-     money integer );
+     money integer,
+     constraint money_nonnegative check (money >= 0));
 
      CREATE DATABASE windows;
      \c windows
