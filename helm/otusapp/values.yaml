@@ -73,7 +73,7 @@ service:
   windows:
     port: 80
     targetport: 8000
-  notyfy:
+  notify:
     port: 80
     targetport: 8000
 
