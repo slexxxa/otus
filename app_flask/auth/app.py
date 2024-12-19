@@ -5,17 +5,20 @@ from prometheus_flask_exporter import PrometheusMetrics
 from functools import wraps
 import psycopg2, os
 import jwt, datetime, string  # pyjwt
+import requests #requests 2.32.3
+import json as jsons
 
-global dbname, user, password, host, port, data
+global dbname, user, password, host, port, data, token
 
-envdbname = os.environ.get("PGDBNAME", "otus")
+envdbname = os.environ.get("PGDBNAME", "auth")
 envuser = os.environ.get("PGUSER", "postgres")
 envpassword = os.environ.get("PGPASSWORD", "12345678")
 envhost = os.environ.get("PGHOST", "10.169.44.141")
 envport = os.environ.get("PGPORT", "5432")
+envbilling = os.environ.get("billing_url", "127.0.0.1:8001")
 
 
-def get_password(username):
+def get_profile(username):
     conn = psycopg2.connect(
         dbname=envdbname,
         user=envuser,
@@ -25,13 +28,17 @@ def get_password(username):
     )
     cur = conn.cursor()
     cur.execute("""
-                        SELECT password from users WHERE username = %s;""", (username,)
+                        SELECT password, email, phone from users WHERE username = %s;""", (username,)
                 )
     row = cur.fetchone()
+    conn.commit()
+
+    cur.close()
+    conn.close()
     if row is None:
         return 199
     else:
-        return row[0]
+        return row
 
 
 def psql(method, uid=0, username=0, password=0, firstname=0, lastname=0, email=0, phone=0):
@@ -90,7 +97,7 @@ def psql(method, uid=0, username=0, password=0, firstname=0, lastname=0, email=0
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'verySecretKeyQQQ' #''.join(random.choices(string.ascii_letters, k=20))
+app.config['SECRET_KEY'] = 'jndsifhvusdkhbfjdsfbgljdbgfvljdsgvjld' #'''.join(random.choices(string.ascii_letters, k=20))
 
 PrometheusMetrics(app)
 
@@ -98,6 +105,7 @@ PrometheusMetrics(app)
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
+        global token
         token = request.args.get('token')
 
         if not token:
@@ -150,6 +158,7 @@ def update_user():
 @token_required
 def post_user():
     global data
+    global token
     request_data = request.get_json()
     username = request_data['username']
     password = request_data['password']
@@ -158,7 +167,14 @@ def post_user():
     email = request_data['email']
     phone = request_data['phone']
     if data['user'] == 'admin':
-        return psql("POST", 0, username, password, firstname, lastname, email, phone)
+        psql("POST", 0, username, password, firstname, lastname, email, phone)
+        payload = jsons.dumps({'username': username})
+        param = {'token': token}
+        json_headers = {"Content-type": "application/json"}
+        connstring = "http://" + envbilling + "/api/v1/user"
+        r = requests.post(connstring, data=payload, params=param, headers=json_headers)
+        print(f"url: {r.url} \n\ntext: \n {r.text}\n\ncode:{r.status_code}")
+        return Response(username, 201)
     else:
         return Response('token is invalid', 403)
 
@@ -174,13 +190,13 @@ def login():
     if not auth:
         return Response('you need be authorised', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
     username_from_auth = auth.username
-    password_from_db = get_password(username_from_auth)
-    if password_from_db == 199:
+    profile_from_db = get_profile(username_from_auth)
+    if profile_from_db == 199:
         return Response('you are not authorised', 401)
     password_from_auth = auth.password.rstrip()
-    if password_from_db == password_from_auth:
+    if profile_from_db[0] == password_from_auth:
         token = jwt.encode(
-            {'user': username_from_auth, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=50)},
+            {'user': username_from_auth,'email': profile_from_db[1], 'phone': profile_from_db[2], 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=50)},
             app.config['SECRET_KEY'], algorithm='HS256')
         return json.jsonify({'token': token})
     else:
