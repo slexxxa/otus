@@ -7,7 +7,7 @@ import requests #requests 2.32.3
 
 global dbname, user, password, host, port, data
 
-envdbname = os.environ.get("PGDBNAME", "notyfy")
+envdbname = os.environ.get("PGDBNAME", "notify")
 envuser = os.environ.get("PGUSER", "postgres")
 envpassword = os.environ.get("PGPASSWORD", "12345678")
 envhost = os.environ.get("PGHOST", "10.169.44.141")
@@ -28,6 +28,26 @@ def token_required(f):
 
         return f(*args, **kwargs)
     return decorated
+
+
+def get_notify_from_db(email):
+    conn = psycopg2.connect(
+        dbname=envdbname,
+        user=envuser,
+        password=envpassword,
+        host=envhost,
+        port=envport
+    )
+    cur = conn.cursor()
+    cur.execute("""
+                        SELECT message FROM email WHERE email = %s ORDER BY id DESC LIMIT 1;""", (email, )
+                )
+    row = cur.fetchone()
+    conn.commit()
+
+    cur.close()
+    conn.close()
+    return row[0]
 
 
 def create_notify(email, message):
@@ -69,6 +89,20 @@ def post_notify():
     if data['user'] == 'admin':
         create_notify(email, message)
         return Response('message sended', 201)
+    else:
+        return Response('token is invalid', 403)
+
+
+
+@app.route('/api/v1/notify', methods=['GET'])
+@token_required
+def get_notify():
+    global data
+    request_data = request.get_json()
+    email = request_data['email']
+    if data['user'] == 'admin':
+        out = get_notify_from_db(email)
+        return Response(str(out), 200)
     else:
         return Response('token is invalid', 403)
 
