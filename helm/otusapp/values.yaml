@@ -219,7 +219,7 @@ db:
      INSERT INTO windows (th, cost) VALUES ('cleaner',1000);
      INSERT INTO windows (th, cost) VALUES ('car',10000);
 
-     CREATE DATABASE notyfy;
+     CREATE DATABASE notify;
      \c notify
      CREATE TABLE email (
      id bigserial primary key,
