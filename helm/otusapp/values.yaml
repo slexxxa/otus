@@ -101,7 +101,7 @@ ingress:
     - host: arch.homework
       http:
         paths:
-        - path: "/auth(.*)"
+        - path: "/billing(.*)"
           pathType: Prefix
           backend:
             service:
@@ -112,7 +112,7 @@ ingress:
     - host: arch.homework
       http:
         paths:
-        - path: "/auth(.*)"
+        - path: "/windows(.*)"
           pathType: Prefix
           backend:
             service:
@@ -123,7 +123,7 @@ ingress:
     - host: arch.homework
       http:
         paths:
-        - path: "/auth(.*)"
+        - path: "/notify(.*)"
           pathType: Prefix
           backend:
             service:
