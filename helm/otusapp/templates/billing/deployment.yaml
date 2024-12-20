@@ -40,7 +40,7 @@ spec:
             - name: PGUSER
               value: {{ .Values.db.user }}
             - name: PGDBNAME
-              value: {{ .Values.db.dbname }}
+              value: {{ .Values.db.dbname.billing }}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:

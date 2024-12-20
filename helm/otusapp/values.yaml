@@ -181,7 +181,11 @@ db:
   image: "bitnami/postgresql:17.0.0-debian-12-r6"
   host: postgresql
   user: postgres
-  dbname: otus
+  dbname:
+    auth: auth
+    billing: billing
+    windows: windows
+    notify: notify
   migrationScript: |
      CREATE DATABASE auth; 
      \c auth
@@ -216,7 +220,7 @@ db:
      INSERT INTO windows (th, cost) VALUES ('car',10000);
 
      CREATE DATABASE notyfy;
-     \c notyfy
+     \c notify
      CREATE TABLE email (
      id bigserial primary key,
      email varchar(20),
