@@ -41,7 +41,7 @@ spec:
               value: {{ .Values.db.user }}
             - name: PGDBNAME
               value: {{ .Values.db.dbname.auth }}
-            - name: envbilling
+            - name: billing_url
               value: billing
             - name: PGPASSWORD
               valueFrom:

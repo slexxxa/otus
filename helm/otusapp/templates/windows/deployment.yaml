@@ -41,9 +41,9 @@ spec:
               value: {{ .Values.db.user }}
             - name: PGDBNAME
               value: {{ .Values.db.dbname.windows }}
-            - name: envnotify
+            - name: notify_url
               value: notify
-            - name: envbilling
+            - name: billing_url
               value: billing
             - name: PGPASSWORD
               valueFrom:
