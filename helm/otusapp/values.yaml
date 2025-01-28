@@ -221,7 +221,7 @@ db:
      
      CREATE TABLE order_table (
      id bigserial primary key,
-     window varchar(20),
+     th varchar(20),
      cost integer,
      username varchar(20),
      email varchar(20),
@@ -234,10 +234,36 @@ db:
      x_request_id varchar(30) primary key,
      date timestamp NOT NULL DEFAULT NOW() );
 
-
      CREATE DATABASE notify;
      \c notify
      CREATE TABLE email (
      id bigserial primary key,
      email varchar(20),
      message text );
+
+     CREATE DATABASE store;
+     \c store
+     CREATE TABLE store (
+     id bigserial primary key,
+     th varchar(20),
+     quantity integer );
+     INSERT INTO store (th, quantity) VALUES ('tabouret',10);
+     INSERT INTO store (th, quantity) VALUES ('cow',4);
+     INSERT INTO store (th, quantity) VALUES ('pin',50);
+     INSERT INTO store (th, quantity) VALUES ('cleaner',8);
+     INSERT INTO store (th, quantity) VALUES ('car',2);
+
+     CREATE TABLE reservation (
+     order_id bigserial primary key,
+     th varchar(20),
+     quantity integer );
+
+
+     CREATE DATABASE delivery;
+     \c delivery
+     CREATE TABLE delivery (
+     order_id bigserial primary key,
+     th varchar(20),
+     username varchar(20),
+     phone varchar(20),
+     quantity integer );
