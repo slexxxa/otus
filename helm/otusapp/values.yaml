@@ -246,7 +246,8 @@ db:
      CREATE TABLE store (
      id bigserial primary key,
      th varchar(20),
-     quantity integer );
+     quantity integer,
+     constraint quantity_nonnegative check (quantity >= 0) );
      INSERT INTO store (th, quantity) VALUES ('tabouret',10);
      INSERT INTO store (th, quantity) VALUES ('cow',4);
      INSERT INTO store (th, quantity) VALUES ('pin',50);
