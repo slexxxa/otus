@@ -9,28 +9,28 @@ replicaCount: 2
 image:
   auth:
     repository: slexxa/auth
-    # This sets the pull policy for images.
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.0.7"
   billing:
     repository: slexxa/billing
-    # This sets the pull policy for images.
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.0.1"
   windows:
     repository: slexxa/windows
-    # This sets the pull policy for images.
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
-    tag: "v0.0.3"
+    tag: "v0.0.4"
   notify:
     repository: slexxa/notify
-    # This sets the pull policy for images.
     pullPolicy: IfNotPresent
-    # Overrides the image tag whose default is the chart appVersion.
     tag: "v0.0.2"
+  store:
+    repository: slexxa/store
+    pullPolicy: IfNotPresent
+    tag: "v0.0.1"
+  delivery:
+    repository: slexxa/delivery
+    pullPolicy: IfNotPresent
+    tag: "v0.0.1"
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -74,6 +74,12 @@ service:
     port: 80
     targetport: 8000
   notify:
+    port: 80
+    targetport: 8000
+  store:
+    port: 80
+    targetport: 8000
+  delivery:
     port: 80
     targetport: 8000
 
@@ -128,6 +134,28 @@ ingress:
           backend:
             service:
               name: notify
+              port:
+                number: 80
+    store:
+    - host: arch.homework
+      http:
+        paths:
+        - path: "/store(.*)"
+          pathType: Prefix
+          backend:
+            service:
+              name: store
+              port:
+                number: 80
+    delivery:
+    - host: arch.homework
+      http:
+        paths:
+        - path: "/delivery(.*)"
+          pathType: Prefix
+          backend:
+            service:
+              name: delivery
               port:
                 number: 80
 

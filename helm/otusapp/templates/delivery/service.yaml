@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery
+  labels:
+    app: auth
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.delivery.port }}
+      targetPort: {{ .Values.service.delivery.targetport }}
+      protocol: TCP
+      name: http
+  selector:
+    app: delivery

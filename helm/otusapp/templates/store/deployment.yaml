@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: windows
+  name: store
   labels:
-    app: "windows"
+    app: "store"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: "windows"
+      app: "store"
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -16,7 +16,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: "windows"
+        app: "store"
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -28,11 +28,11 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.windows.repository }}:{{ .Values.image.windows.tag | default .Chart.AppVersion }}"
+          image: "{{ .Values.image.store.repository }}:{{ .Values.image.store.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.windows.port }}
+              containerPort: {{ .Values.service.store.port }}
               protocol: TCP
           env:
             - name: PGHOST
@@ -40,15 +40,7 @@ spec:
             - name: PGUSER
               value: {{ .Values.db.user }}
             - name: PGDBNAME
-              value: {{ .Values.db.dbname.windows }}
-            - name: notify_url
-              value: notify
-            - name: billing_url
-              value: billing
-            - name: store_url
-              value: store
-            - name: delivery_url
-              value: delivery
+              value: {{ .Values.db.dbname.store }}
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
