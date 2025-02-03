@@ -98,7 +98,7 @@ def post_store():
     th = request_data['th']
     quantity = request_data['quantity']
     if data['user'] == 'admin':
-        request_to_db_store = f"""UPDATE "store" SET quantity = quantity - {quantity} WHERE th = '{th}' ;"""
+        request_to_db_store = f"""UPDATE store SET quantity = quantity - {quantity} WHERE th = '{th}' ;"""
         r = do_request_to_DB_nr(request_to_db_store)
         if r == 197:
           return Response(f'not have such quantity of {th}', 210)

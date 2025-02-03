@@ -26,7 +26,7 @@ image:
   store:
     repository: slexxa/store
     pullPolicy: IfNotPresent
-    tag: "v0.0.3"
+    tag: "v0.0.1"
   delivery:
     repository: slexxa/delivery
     pullPolicy: IfNotPresent
@@ -214,6 +214,8 @@ db:
     billing: billing
     windows: windows
     notify: notify
+    store: store
+    delivery: delivery
   migrationScript: |
      CREATE DATABASE auth; 
      \c auth
