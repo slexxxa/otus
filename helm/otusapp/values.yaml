@@ -18,7 +18,7 @@ image:
   windows:
     repository: slexxa/windows
     pullPolicy: IfNotPresent
-    tag: "v0.0.4"
+    tag: "v0.0.5"
   notify:
     repository: slexxa/notify
     pullPolicy: IfNotPresent

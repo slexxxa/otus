@@ -4,4 +4,5 @@ RUN pip install Flask==3.0.3 && pip install psycopg2==2.9.10 && pip install prom
 WORKDIR /app
 COPY app.py /app
 USER flask
+ENV PYTHONBUFFERED=0
 CMD ["python", "app.py"]
