@@ -119,6 +119,7 @@ def money_delete(username, money):
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'jndsifhvusdkhbfjdsfbgljdbgfvljdsgvjld' #'''.join(random.choices(string.ascii_letters, k=20))
+PrometheusMetrics(app)
 
 
 @app.route('/health')

@@ -14,23 +14,23 @@ image:
   billing:
     repository: slexxa/billing
     pullPolicy: IfNotPresent
-    tag: "v0.0.2"
+    tag: "v0.0.3"
   windows:
     repository: slexxa/windows
     pullPolicy: IfNotPresent
-    tag: "v0.0.6"
+    tag: "v0.0.7"
   notify:
     repository: slexxa/notify
     pullPolicy: IfNotPresent
-    tag: "v0.0.3"
+    tag: "v0.0.4"
   store:
     repository: slexxa/store
     pullPolicy: IfNotPresent
-    tag: "v0.0.10"
+    tag: "v0.0.11"
   delivery:
     repository: slexxa/delivery
     pullPolicy: IfNotPresent
-    tag: "v0.0.2"
+    tag: "v0.0.3"
 
 # This is for the secretes for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
